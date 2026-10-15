@@ -39,7 +39,7 @@ call print_int
 
 
 
-![task1](images/task1.png)
+![task1](Images/task1.png)
 
 
 
@@ -49,7 +49,7 @@ Reads two integers with `read_int` (result returned in `eax`), stores them in `.
 
 
 
-![task1_2](images/task1_2.png)
+![task1_2](Images/task1_2.png)
 
 
 
@@ -89,11 +89,11 @@ Valid input (60), too small (10), too large (150):
 
 
 
-![task2_1](images/task2_1.png)
+![task2_1](Images/task2_1.png)
 
-![task2_1 too small](images/task2_1_small.png)
+![task2_1 too small](Images/task2_1_small.png)
 
-![task2_1 too large](images/task2_1_big.png)
+![task2_1 too large](Images/task2_1_big.png)
 
 
 
@@ -113,7 +113,7 @@ mov  [array + ecx*4], eax
 
 
 
-![task2_2](images/task2_2.png)
+![task2_2](Images/task2_2.png)
 
 
 
@@ -123,9 +123,9 @@ Same array, the user enters start and end. The range is valid only if `1 <= star
 
 
 
-![task2_3](images/task2_3.png)
+![task2_3](Images/task2_3.png)
 
-![task2_3 invalid](images/task2_3_bad.png)
+![task2_3 invalid](Images/task2_3_bad.png)
 
 
 
@@ -135,7 +135,7 @@ The `all` target builds `task1`, `task1_2`, `task2_1`, `task2_2` and `task2_3`. 
 
 
 
-![make](images/make.png)
+![make](Images/make.png)
 
 
 

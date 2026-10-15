@@ -39,13 +39,17 @@ call print_int
 
 
 
-Output: `a + b = 40`
+![task1](images/task1.png)
 
 
 
 ### task1_2.asm
 
 Reads two integers with `read_int` (result returned in `eax`), stores them in `.bss`, adds them and prints the sum.
+
+
+
+![task1_2](images/task1_2.png)
 
 
 
@@ -81,6 +85,18 @@ loop print_loop     ; ecx--, jump back while ecx != 0
 
 
 
+Valid input (60), too small (10), too large (150):
+
+
+
+![task2_1](images/task2_1.png)
+
+![task2_1 too small](images/task2_1_small.png)
+
+![task2_1 too large](images/task2_1_big.png)
+
+
+
 ### task2_2.asm: sum of array 1..100
 
 The array has 100 dwords in `.bss`. Element `i` is at `[array + ecx*4]` because each element is 4 bytes.
@@ -97,7 +113,7 @@ mov  [array + ecx*4], eax
 
 
 
-Output: `Sum = 5050`
+![task2_2](images/task2_2.png)
 
 
 
@@ -107,11 +123,23 @@ Same array, the user enters start and end. The range is valid only if `1 <= star
 
 
 
+![task2_3](images/task2_3.png)
+
+![task2_3 invalid](images/task2_3_bad.png)
+
+
+
 ## Task 3: Makefile
 
 The `all` target builds `task1`, `task1_2`, `task2_1`, `task2_2` and `task2_3`. Pattern rules assemble each `.asm` with `nasm -f elf` and link with `gcc -m32` together with `driver.o` and `asm_io.o`.
 
 
 
-## Screenshots
+![make](images/make.png)
+
+
+
+## Notes
+
+`asm_io.asm` provides `print_int`, `print_char`, `print_string`, `print_nl`, `read_int` and `read_char`. Values go in and out through `eax`. The name buffer is 64 bytes, so a longer name overflows it (known limitation).
 

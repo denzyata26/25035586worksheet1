@@ -139,7 +139,8 @@ Extends `task2_2` by asking the user to provide a `start` and `end` index.
 ![task2_3 valid range test](Images/task2_3.png)
 ![task2_3 invalid range test](Images/task2_3_bad.png)
 
-**What we did** We expanded our array program to take custom start and end positions from the user. We added boundary checks to prevent out-of-bounds reading and used pointer offsets ((start - 1) * 4) to sum up only the selected range.
+[!NOTE]
+> **Quick Summary:** We expanded our array program to take custom start and end positions from the user. We added boundary checks to prevent out-of-bounds reading and used pointer offsets ((start - 1) * 4) to sum up only the selected range.
 ---
 
 

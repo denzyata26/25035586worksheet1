@@ -44,8 +44,6 @@ The repository is laid out according to the worksheet instructions, keeping sour
     └── task2_3.asm
 ```
 
-![Workspace Structure](Images/vscode-structure.png)
-
 To clean and compile all targets from scratch:
 ```bash
 make clean && make
@@ -53,11 +51,11 @@ make clean && make
 
 ---
 
-## Task 1: Basic Assembly & Calling C from Assembler (20%)
+## Task 1: Basic Assembly & Calling C from Assembler
 
 Task 1 focuses on writing basic assembly routines that can be called from a C program via `driver.c`.
 
-### `task1.asm` (Slide 18)
+### `task1.asm` 
 This program adds two hardcoded integers defined in `.data` (`a` and `b`) and prints the result using `print_int`.
 * Square brackets (`[a]`) are used to dereference the label and read the stored integer value rather than its memory address.
 * Because calling `print_string` modifies `eax`, the calculated sum is temporarily saved in `ebx` and moved back into `eax` before calling `print_int`.
@@ -74,7 +72,7 @@ call print_int
 
 ![task1 code](Images/task1.png)
 
-### `task1_2.asm` (Slide 22)
+### `task1_2.asm` 
 Extends the first task by asking the user for two integers using `read_int`.
 * Each integer returned in `eax` is saved into an uninitialised variable (`resd 1`) in `.bss` so it is not lost while prompting for the second number.
 * Both numbers are then added together and printed.
@@ -86,9 +84,10 @@ Running both programs in the terminal outputs the expected sums (`40` and `44`):
 
 ![task1 and task1_2 terminal test](Images/task1_test.png)
 
+> **Quick Summary (What we did):** We bypassed standard C libraries to see how a CPU boots up from scratch. Using raw assembly, we loaded `0xCAFEBABE` into the `eax` register, took inputs from the user, safely stored them in `.bss`, and performed basic addition.
 ---
 
-## Task 2: Loops, Conditionals, and Arrays (20%)
+## Task 2: Loops, Conditionals, and Arrays 
 
 ### `task2_1.asm`: Input Validation & Welcome Loop
 This task reads the user's name and prints a welcome message a given number of times if the count is between 50 and 100.
@@ -107,12 +106,12 @@ print_loop:
     ; print prefix, name buffer, and newline
     loop print_loop     ; decrements ecx and branches until 0
 ```
+### Test Runs (Valid, Too Small, and Too Large Inputs):
+* **Valid Input (60):** The program verifies that the entered number is between 50 and 100, enters a loop, and prints the name to the screen the specified number of times (`60 times`).
+* **Too Small Input (10):** When a number below the lower bound is entered (`10`), the program outputs `Error: number too small` and terminates.
+* **Too Large Input (150):** When a number above the upper bound is entered (`150`), the program displays `Error: number too large` as a warning.
 
 ![task2_1 implementation](Images/task2_1.png)
-
-**Test Runs (Valid: 60, Too Small: 10, Too Large: 150):**
-
-![task2_1 valid execution](Images/task2_1_test.png)
 ![task2_1 too small](Images/task2_1_small.png)
 ![task2_1 too large](Images/task2_1_big.png)
 
@@ -130,6 +129,7 @@ mov  [array + ecx*4], eax     ; store at 4-byte offset
 ![task2_2 code](Images/task2_2.png)
 ![task2_2 execution output](Images/task2_2_success.png)
 
+> **Quick Summary (What we did):** We implemented conditional branching (`cmp`, `jl`, `jg`) to validate user input within the strict range of `50 < n < 100`. If valid, it loops and prints the name; otherwise, it throws an error. For arrays, we used pointer arithmetic (`ecx*4`) to fill values from 1 to 100 and calculated the total sum.
 ### `task2_3.asm`: Range Sum with Bounds Checking
 Extends `task2_2` by asking the user to provide a `start` and `end` index.
 * **Validation:** The range is checked to make sure `1 <= start <= end <= 100`. Any input breaking this condition prints `Error: invalid range`.
@@ -140,7 +140,7 @@ Extends `task2_2` by asking the user to provide a `start` and `end` index.
 
 ---
 
-## Task 3: Makefile Build Automation (20%)
+## Task 3: Makefile Build Automation
 
 A root `Makefile` automates compiling and linking all programs instead of running manual terminal commands.
 
@@ -156,8 +156,9 @@ ata2.onursoy@live.uwe.ac.uk@csctcloud:~/25035586worksheet1$ make clean && make
 ![make build run](Images/make.png)
 
 ---
+> **Quick Summary (What we did):** Instead of compiling files manually every time, we set up an automated Makefile. It handles compiling assembly and C files independently, linking them together into a final bootable binary (`kernel.elf`), and includes a clean rule.
 
-## Task 4: Documentation & Practical Notes (40%)
+## Task 4: Documentation & Practical Notes
 
 This `README.md` documents the code implementations, design decisions, and test outputs for all worksheet tasks.
 

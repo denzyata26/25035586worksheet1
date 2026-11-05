@@ -173,12 +173,12 @@ This `README.md` documents the code implementations, design decisions, and test 
     Functions from `asm_io` (such as `print_string` and `read_int`) use `eax` for passing and returning values, so values that need to be saved are kept in `ebx` or memory.
 
 3. **Buffer Limit:** 
-    Security Risk: Exceeding 63 characters causes extra bytes to bleed into adjacent .bss memory or overwrite stack framing data (Buffer Overflow vulnerability).
+    *Security Risk:* Exceeding 63 characters causes extra bytes to bleed into adjacent .bss memory or overwrite stack framing data (Buffer Overflow vulnerability).
 
-    Mitigation: Safe production code must strictly bound input loops or utilize length-checked inputs (such as fgets semantics) to preserve memory integrity and protect against stack corruption exploit vectors.
+    *Mitigation:* Safe production code must strictly bound input loops or utilize length-checked inputs (such as fgets semantics) to preserve memory integrity and protect against stack corruption exploit vectors.
 
 4. **Linker Warnings:** 
 
-    Technical Context: Legacy 32-bit asm_io object files omit explicit stack execution markers. Modern OS kernels enable the NX/XD (No-Execute) bit memory protection mechanism by default to prevent arbitrary shellcode execution on the stack.
+    *Technical Context:* Legacy 32-bit asm_io object files omit explicit stack execution markers. Modern OS kernels enable the NX/XD (No-Execute) bit memory protection mechanism by default to prevent arbitrary shellcode execution on the stack.
 
-    Impact: Since our code executes solely within .text and stores data in .data/.bss, binaries run without issue despite missing stack metadata flags.
+    *Impact:* Since our code executes solely within .text and stores data in .data/.bss, binaries run without issue despite missing stack metadata flags.

@@ -173,6 +173,7 @@ This `README.md` documents the code implementations, design decisions, and test 
     Functions from `asm_io` (such as `print_string` and `read_int`) use `eax` for passing and returning values, so values that need to be saved are kept in `ebx` or memory.
 
 3. **Buffer Limit:** 
+    
     *Security Risk:* Exceeding 63 characters causes extra bytes to bleed into adjacent .bss memory or overwrite stack framing data (Buffer Overflow vulnerability).
 
     *Mitigation:* Safe production code must strictly bound input loops or utilize length-checked inputs (such as fgets semantics) to preserve memory integrity and protect against stack corruption exploit vectors.

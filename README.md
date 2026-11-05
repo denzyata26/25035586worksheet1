@@ -84,7 +84,7 @@ Running both programs in the terminal outputs the expected sums (`40` and `44`):
 
 ![task1 and task1_2 terminal test](Images/task1_test.png)
 
-> **Quick Summary (What we did):** We bypassed standard C libraries to see how a CPU boots up from scratch. Using raw assembly, we loaded `0xCAFEBABE` into the `eax` register, took inputs from the user, safely stored them in `.bss`, and performed basic addition.
+> **Quick Summary:** We bypassed standard C libraries to see how a CPU boots up from scratch. Using raw assembly, we loaded `0xCAFEBABE` into the `eax` register, took inputs from the user, safely stored them in `.bss`, and performed basic addition.
 ---
 
 ## Task 2: Loops, Conditionals, and Arrays 
@@ -129,7 +129,8 @@ mov  [array + ecx*4], eax     ; store at 4-byte offset
 ![task2_2 code](Images/task2_2.png)
 ![task2_2 execution output](Images/task2_2_success.png)
 
-> **Quick Summary (What we did):** We implemented conditional branching (`cmp`, `jl`, `jg`) to validate user input within the strict range of `50 < n < 100`. If valid, it loops and prints the name; otherwise, it throws an error. For arrays, we used pointer arithmetic (`ecx*4`) to fill values from 1 to 100 and calculated the total sum.
+> **Quick Summary :** We implemented conditional branching (`cmp`, `jl`, `jg`) to validate user input within the strict range of `50 < n < 100`. If valid, it loops and prints the name; otherwise, it throws an error. For arrays, we used pointer arithmetic (`ecx*4`) to fill values from 1 to 100 and calculated the total sum.
+
 ### `task2_3.asm`: Range Sum with Bounds Checking
 Extends `task2_2` by asking the user to provide a `start` and `end` index.
 * **Validation:** The range is checked to make sure `1 <= start <= end <= 100`. Any input breaking this condition prints `Error: invalid range`.
@@ -138,7 +139,9 @@ Extends `task2_2` by asking the user to provide a `start` and `end` index.
 ![task2_3 valid range test](Images/task2_3.png)
 ![task2_3 invalid range test](Images/task2_3_bad.png)
 
+What we did  In simple terms: We expanded our array program to take custom start and end positions from the user. We added boundary checks to prevent out-of-bounds reading and used pointer offsets ((start - 1) * 4) to sum up only the selected range.
 ---
+
 
 ## Task 3: Makefile Build Automation
 
@@ -163,7 +166,19 @@ ata2.onursoy@live.uwe.ac.uk@csctcloud:~/25035586worksheet1$ make clean && make
 This `README.md` documents the code implementations, design decisions, and test outputs for all worksheet tasks.
 
 ### Implementation Details
-1. **Calling Convention:** The assembly functions follow the standard 32-bit `cdecl` convention, with `driver.c` setting up and cleaning the stack.
-2. **Register Usage:** Functions from `asm_io` (such as `print_string` and `read_int`) use `eax` for passing and returning values, so values that need to be saved are kept in `ebx` or memory.
-3. **Buffer Limit:** The user name buffer in `task2_1` is set to 64 bytes (`resb 64`). If an input exceeds 63 characters, it will overflow into adjacent memory.
-4. **Linker Warnings:** During `make`, the linker gives warnings about `.note.GNU-stack` and `DT_TEXTREL`. This happens because the legacy 32-bit `asm_io` routines lack modern non-executable stack flags, but this is expected and does not impact program execution.
+1. **Calling Convention:** 
+The assembly functions follow the standard 32-bit `cdecl` convention, with `driver.c` setting up and cleaning the stack.
+
+2. **Register Usage:** 
+Functions from `asm_io` (such as `print_string` and `read_int`) use `eax` for passing and returning values, so values that need to be saved are kept in `ebx` or memory.
+
+3. **Buffer Limit:** 
+Security Risk: Exceeding 63 characters causes extra bytes to bleed into adjacent .bss memory or overwrite stack framing data (Buffer Overflow vulnerability).
+
+Mitigation: Safe production code must strictly bound input loops or utilize length-checked inputs (such as fgets semantics) to preserve memory integrity and protect against stack corruption exploit vectors.
+
+4. **Linker Warnings:** 
+
+Technical Context: Legacy 32-bit asm_io object files omit explicit stack execution markers. Modern OS kernels enable the NX/XD (No-Execute) bit memory protection mechanism by default to prevent arbitrary shellcode execution on the stack.
+
+Impact: Since our code executes solely within .text and stores data in .data/.bss, binaries run without issue despite missing stack metadata flags.
